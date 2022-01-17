@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { createWorker, Page, Worker } from 'tesseract.js';
 // import { Cat } from './interfaces/cat.interface';
@@ -24,6 +25,7 @@ export class OcrService {
       await worker.load();
       await worker.loadLanguage('eng');
       await worker.initialize('eng');
+      // console.log("await worker.initialize('eng') Ok");
     }
     return worker;
   }
@@ -32,12 +34,14 @@ export class OcrService {
     this._ocrWorkers.push(worker);
   }
 
-  public async ocr(buffer: Buffer): Promise<Page> {
+  public async ocr(buffer: any): Promise<Page> {
     const worker = await this.getOcrWorker();
     try {
       const result = await worker.recognize(buffer);
-      return result.data;
+      const page = result.data;
+      return page;
     } catch (error) {
+      console.log('throw error', error);
       throw error;
       // console.log(error);
     } finally {

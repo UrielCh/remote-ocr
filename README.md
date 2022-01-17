@@ -4,7 +4,7 @@ tesseract js via a nest-js + fastify server
 
 ## why
 
-this project intend to debug tesseract.js random crash.
+This project intend to debug tesseract.js random crashes.
 
 ## Installation
 
@@ -28,6 +28,9 @@ $ npm run start:prod
 ## Test
 
 ```bash
+
+curl.exe -i -H 'Content-Type: image/png' -X POST --data-binary  @test/exampleBW.png http://127.0.0.1:3000/meta
+
 # unit tests
 $ npm run test
 
