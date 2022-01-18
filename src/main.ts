@@ -4,28 +4,15 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import Fastify, { FastifyRequest } from 'fastify';
+import Fastify from 'fastify';
 import { AppModule } from './app.module';
+import { addMediaParser } from './mediaParser';
 
 async function bootstrap() {
   const fastify = Fastify({
     logger: false,
   });
-
-  fastify.addContentTypeParser(
-    /^image\/.*/,
-    function (request: FastifyRequest, payload, done) {
-      // const len = Number(request.headers['content-length']);
-      const buffers = [];
-      payload.on('data', (chunk) => {
-        buffers.push(chunk);
-      });
-      payload.on('end', () => {
-        done(null, Buffer.concat(buffers));
-      });
-    },
-  );
-
+  addMediaParser(fastify);
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(fastify),

@@ -19,13 +19,16 @@ export class OcrService {
         // cacheMethod: string
         // workerBlobURL: boolean
         // gzip: boolean
-        // logger: (arg: any) => void,
-        // errorHandler: (arg: any) => void
+        logger: (arg: { workerId: string, jobId: string, status: string, progress: number, userJobId: string}) => {
+          // console.log('logger', JSON.stringify(arg));
+        },
+        errorHandler: (arg: any) => {
+          // console.log('errorHandler', arg);
+        }
       });
       await worker.load();
       await worker.loadLanguage('eng');
       await worker.initialize('eng');
-      // console.log("await worker.initialize('eng') Ok");
     }
     return worker;
   }
@@ -34,7 +37,7 @@ export class OcrService {
     this._ocrWorkers.push(worker);
   }
 
-  public async ocr(buffer: any): Promise<Page> {
+  public async ocr(buffer: Buffer): Promise<Page> {
     const worker = await this.getOcrWorker();
     try {
       const result = await worker.recognize(buffer);
